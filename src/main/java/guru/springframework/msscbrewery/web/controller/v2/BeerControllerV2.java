@@ -1,4 +1,4 @@
-package guru.springframework.msscbrewery.web.controller;
+package guru.springframework.msscbrewery.web.controller.v2;
 
 import java.util.UUID;
 
@@ -15,29 +15,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import guru.springframework.msscbrewery.services.BeerService;
-import guru.springframework.msscbrewery.web.model.BeerDto;
+import guru.springframework.msscbrewery.services.v2.BeerServiceV2;
+import guru.springframework.msscbrewery.web.model.v2.BeerDtoV2;
 import lombok.RequiredArgsConstructor;
 
-@Deprecated
-@RequestMapping("/api/v1/beer")
+@RequestMapping("/api/v2/beer")
 @RestController
 @RequiredArgsConstructor
-public class BeerController {
+public class BeerControllerV2 {
 	
-	private final BeerService beerService;
+	private final BeerServiceV2 beerService;
 	
 
 	@GetMapping("/{beerId}")
-	public ResponseEntity<BeerDto> getBeer(@PathVariable("beerId") UUID beerId) {
+	public ResponseEntity<BeerDtoV2> getBeer(@PathVariable("beerId") UUID beerId) {
 		
-		return new ResponseEntity<BeerDto>(this.beerService.getBeerById(beerId), HttpStatus.OK);
+		return new ResponseEntity<BeerDtoV2>(this.beerService.getBeerById(beerId), HttpStatus.OK);
 	}
 	
 	@PostMapping
-	public ResponseEntity<Object> createBeer(@RequestBody BeerDto beerDto) {
+	public ResponseEntity<Object> createBeer(@RequestBody BeerDtoV2 beerDto) {
 		
-		BeerDto savedBeer = this.beerService.saveBeer(beerDto);
+		BeerDtoV2 savedBeer = this.beerService.saveBeer(beerDto);
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("location", "/api/v1/beer/".concat(savedBeer.getId().toString()));
 		
@@ -45,7 +44,7 @@ public class BeerController {
 	}
 	
 	@PutMapping("/{beerId}")
-	public ResponseEntity<Object> updateBeer(@PathVariable("beerId") UUID beerId, @RequestBody BeerDto beerDto) {
+	public ResponseEntity<Object> updateBeer(@PathVariable("beerId") UUID beerId, @RequestBody BeerDtoV2 beerDto) {
 		
 		this.beerService.updateBeer(beerId, beerDto);
 		
